@@ -260,79 +260,116 @@
     const st = document.createElement("style");
     st.id = 'nb-dynamic-styles';
     st.textContent = `
-      :root{--bg-color:#e0e5ec;--electric-glow-1:#00f2ff;--electric-glow-2:#ff00ff;--success-color:#2ecc71;--danger-color:#ff4757;--emboss-light:#ffffff;--emboss-shadow:#a3b1c6;--text-color:#4a5568;--text-muted:#718096;--warning-color:#ffa500;--info-color:#00b4d8}
-      @keyframes nb-rotate-glow{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-      @keyframes nb-rotate-glow-reverse{0%{transform:rotate(360deg)}100%{transform:rotate(0deg)}}
-      @keyframes nb-fadeIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
-      @keyframes nb-slideUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-      @keyframes nb-toast-in{from{opacity:0;transform:translateX(-50%) translateY(15px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
-      @keyframes nb-progress-glow{0%,100%{filter:hue-rotate(0deg)}50%{filter:hue-rotate(180deg)}}
-      @keyframes nb-pulse{0%,100%{opacity:0.6}50%{opacity:1}}
-      @keyframes nb-shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
-      @keyframes nb-glow-pulse{0%,100%{opacity:0.5}50%{opacity:0.9}}
-      @keyframes nb-log-highlight{0%{background:transparent}50%{background:rgba(0,242,255,0.06)}100%{background:transparent}}
-      @keyframes nb-log-success{0%{background:transparent}50%{background:rgba(46,204,113,0.06)}100%{background:transparent}}
-      @keyframes nb-log-error{0%{background:transparent}50%{background:rgba(255,71,87,0.06)}100%{background:transparent}}
-      @keyframes nb-key-found{0%{transform:scale(1)}50%{transform:scale(1.05);background:rgba(255,0,255,0.1)}100%{transform:scale(1)}}
-      .nb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.3);z-index:2147483647;display:grid;place-items:center;padding:20px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:nb-fadeIn 0.3s ease;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;overflow:hidden}
-      .nb-electric-wrapper{position:relative;padding:3px;border-radius:24px;background:rgba(0,0,0,0.05);overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.1);width:420px;max-width:calc(100vw - 40px);flex-shrink:0}
-      .nb-glow-layer{position:absolute;inset:-50%;pointer-events:none;z-index:0;opacity:1;animation:nb-glow-pulse 3s ease-in-out infinite}
-      .nb-glow-layer.glow-default{background:conic-gradient(transparent 0deg,rgba(0,242,255,1) 60deg,transparent 120deg,rgba(255,0,255,1) 180deg,transparent 240deg,rgba(0,242,255,1) 300deg,transparent 360deg);animation:nb-rotate-glow 4s linear infinite;opacity:1}
-      .nb-glow-layer.glow-focus-1{background:conic-gradient(transparent 0deg,var(--electric-glow-1) 90deg,transparent 180deg,var(--electric-glow-2) 270deg,transparent 360deg);animation:nb-rotate-glow 2.5s linear infinite;opacity:0;transition:opacity 0.4s ease}
-      .nb-glow-layer.glow-focus-2{background:conic-gradient(transparent 0deg,var(--electric-glow-2) 90deg,transparent 180deg,var(--electric-glow-1) 270deg,transparent 360deg);animation:nb-rotate-glow-reverse 3s linear infinite;opacity:0;transition:opacity 0.4s ease}
-      .nb-container{position:relative;background:var(--bg-color);padding:24px 20px;border-radius:21px;text-align:center;z-index:1;width:100%;box-sizing:border-box;max-height:calc(100vh - 46px);overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
-      .nb-container.overflow-visible{overflow-y:visible}
-      .nb-container::-webkit-scrollbar{width:3px}
-      .nb-container::-webkit-scrollbar-thumb{background:var(--emboss-shadow);border-radius:10px}
-      .nb-title{color:var(--text-color);margin:0 0 4px;font-weight:800;font-size:20px;letter-spacing:1px;word-break:break-word}
-      .nb-subtitle{color:var(--text-muted);font-size:12px;margin:0 0 18px;letter-spacing:2px;line-height:1.5}
-      .nb-emboss-input{width:100%;padding:14px;border:none;outline:none;background:var(--bg-color);border-radius:14px;font-size:15px;font-weight:700;text-align:center;color:var(--text-color);letter-spacing:4px;box-shadow:inset 6px 6px 12px var(--emboss-shadow),inset -6px -6px 12px var(--emboss-light);transition:all 0.3s cubic-bezier(0.4,0,0.2,1);box-sizing:border-box;font-family:inherit}
-      .nb-emboss-input:focus{box-shadow:inset 2px 2px 5px var(--emboss-shadow),inset -2px -2px 5px var(--emboss-light),0 0 15px var(--electric-glow-1)}
-      .nb-emboss-input.error{box-shadow:inset 6px 6px 12px var(--emboss-shadow),inset -6px -6px 12px var(--emboss-light),0 0 0 2px var(--danger-color)!important;animation:nb-shake 0.4s ease}
-      .nb-emboss-input.success{box-shadow:inset 6px 6px 12px var(--emboss-shadow),inset -6px -6px 12px var(--emboss-light),0 0 0 2px var(--success-color)!important}
-      .nb-error-text{color:var(--danger-color);font-size:11px;font-weight:600;margin:6px 0 10px;display:none;letter-spacing:1px}
-      .nb-emboss-btn{width:100%;padding:14px;border:none;border-radius:14px;background:var(--bg-color);color:var(--text-color);font-weight:700;font-size:13px;cursor:pointer;letter-spacing:2px;font-family:inherit;text-transform:uppercase;box-shadow:6px 6px 12px var(--emboss-shadow),-6px -6px 12px var(--emboss-light);transition:all 0.2s ease;margin-bottom:10px;flex-shrink:0}
-      .nb-emboss-btn:active{box-shadow:inset 4px 4px 8px var(--emboss-shadow),inset -4px -4px 8px var(--emboss-light);transform:scale(0.98)}
-      .nb-emboss-btn:disabled{box-shadow:inset 4px 4px 8px var(--emboss-shadow),inset -4px -4px 8px var(--emboss-light)!important;transform:none!important;opacity:0.7;cursor:not-allowed}
-      .nb-unban-btn{background:linear-gradient(135deg, #667eea 0%, #764ba2 100%)!important;color:white!important;box-shadow:6px 6px 12px var(--emboss-shadow),-6px -6px 12px var(--emboss-light),0 0 20px rgba(102,126,234,0.3)!important}
-      .nb-unban-btn:active{box-shadow:inset 4px 4px 8px var(--emboss-shadow),inset -4px -4px 8px var(--emboss-light),0 0 10px rgba(102,126,234,0.2)!important}
-      .nb-music-btn{position:absolute;top:12px;right:12px;z-index:2;background:var(--bg-color);border:none;color:var(--text-color);border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;box-shadow:3px 3px 6px var(--emboss-shadow),-3px -3px 6px var(--emboss-light);transition:all 0.2s ease;flex-shrink:0}
-      .nb-music-btn:active{box-shadow:inset 3px 3px 6px var(--emboss-shadow),inset -3px -3px 6px var(--emboss-light)}
-      .nb-music-btn.metered{color:var(--danger-color);box-shadow:inset 3px 3px 6px var(--emboss-shadow),inset -3px -3px 6px var(--emboss-light)}
-      .nb-back-btn{position:absolute;top:12px;left:12px;z-index:2;background:var(--bg-color);border:none;color:var(--text-color);border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;box-shadow:3px 3px 6px var(--emboss-shadow),-3px -3px 6px var(--emboss-light);transition:all 0.2s ease;flex-shrink:0}
-      .nb-back-btn:active{box-shadow:inset 3px 3px 6px var(--emboss-shadow),inset -3px -3px 6px var(--emboss-light)}
-      .nb-divider{width:50px;height:2px;background:linear-gradient(90deg,transparent,var(--text-muted),transparent);margin:12px auto}
-      .nb-uid{color:var(--text-muted);font-size:9px;letter-spacing:4px;opacity:0.7}
-      .nb-track{min-height:16px;margin-bottom:16px;font-size:9px;color:var(--text-muted);opacity:0.5;letter-spacing:1px}
-      .nb-track.metered{color:var(--danger-color);opacity:0.7}
-      .nb-footer{font-size:7px;color:var(--text-muted);opacity:1;margin-top:8px;letter-spacing:1px;flex-shrink:0}
-      .nb-footer a{color:#000;text-decoration:none;font-size:inherit;text-shadow:0 0 4px rgba(108,92,231,0.7),0 0 10px rgba(108,92,231,0.5),0 0 20px rgba(108,92,231,0.3)}
-      .nb-live-dot{width:7px;height:7px;background:var(--danger-color);border-radius:50%;box-shadow:0 0 6px var(--danger-color);animation:nb-pulse 1.5s infinite;flex-shrink:0}
-      .nb-log-area{color:var(--text-muted);font-size:8.5px;line-height:1.4;text-align:left;max-height:35vh;overflow-y:auto;overflow-x:hidden;padding:12px;margin-bottom:10px;border-radius:12px;background:var(--bg-color);box-shadow:inset 4px 4px 8px var(--emboss-shadow),inset -4px -4px 8px var(--emboss-light);word-break:break-all;-webkit-overflow-scrolling:touch;font-family:'Segoe UI',Roboto,sans-serif}
-      .nb-log-area::-webkit-scrollbar{width:2px}
-      .nb-log-area::-webkit-scrollbar-thumb{background:var(--emboss-shadow);border-radius:10px}
-      .nb-progress-bar-bg{width:100%;height:6px;background:var(--bg-color);border-radius:10px;box-shadow:inset 3px 3px 6px var(--emboss-shadow),inset -3px -3px 6px var(--emboss-light);overflow:hidden;margin:8px 0;flex-shrink:0}
-      .nb-progress-bar-fill{height:100%;width:0%;border-radius:10px;background:linear-gradient(90deg,var(--electric-glow-1),var(--electric-glow-2),var(--success-color));background-size:200% 100%;animation:nb-progress-glow 4s linear infinite;transition:width 0.15s linear}
-      .nb-progress-bar-fill.error-fill{background:linear-gradient(90deg,var(--danger-color),var(--warning-color),var(--danger-color))!important}
-      .nb-progress-bar-fill.vipteam-success{background:linear-gradient(90deg,#ff00ff,var(--success-color),#ff00ff)!important;background-size:200% 100%!important;animation:nb-progress-glow 2s linear infinite!important}
-      .nb-progress-label{display:flex;justify-content:space-between;align-items:center;font-size:8px;letter-spacing:2px;color:var(--text-color);margin-bottom:4px;flex-shrink:0}
-      .nb-success-check{width:45px;height:45px;background:var(--success-color);color:#fff;border-radius:50%;font-size:22px;display:flex;justify-content:center;align-items:center;margin:0 auto 8px;box-shadow:0 0 20px rgba(46,204,113,0.4);animation:nb-fadeIn 0.4s ease forwards;flex-shrink:0}
-      .nb-exploit-header{display:flex;align-items:center;gap:6px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--emboss-shadow);flex-shrink:0}
-      .nb-exploit-title{color:var(--text-color);font-size:8px;letter-spacing:2px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
-      .nb-status-icon{font-size:45px;margin-bottom:10px}
-      .nb-suspended-icon{font-size:45px;margin-bottom:10px;animation:nb-pulse 2s infinite}
-      .nb-status-user{color:var(--text-muted);font-size:10px;line-height:1.4}
-      .nb-loading-spinner{display:inline-block;width:18px;height:18px;border:2px solid var(--emboss-shadow);border-radius:50%;border-top-color:var(--electric-glow-1);animation:nb-rotate-glow 1s linear infinite;margin-right:8px;vertical-align:middle}
-      .nb-log-entry{display:flex;align-items:center;margin-bottom:2px;padding:2px 6px;border-radius:4px;animation:nb-slideUp 0.3s ease}
-      .nb-log-entry.log-info{background:transparent}
-      .nb-log-entry.log-success{animation:nb-log-success 1.5s ease}
-      .nb-log-entry.log-error{animation:nb-log-error 1.5s ease}
-      .nb-log-entry.log-highlight{animation:nb-log-highlight 1.5s ease}
-      .nb-log-entry.log-key-found{animation:nb-key-found 0.5s ease}
-      .nb-log-icon{font-size:10px;margin-right:5px;min-width:14px;text-align:center;flex-shrink:0}
-      .nb-log-text{font-size:8.5px;line-height:1.3;flex:1;font-weight:600;letter-spacing:0.3px}
-      .nb-retry-badge{display:inline-block;background:var(--warning-color);color:#fff;font-size:7px;padding:1px 4px;border-radius:3px;margin-left:4px;font-weight:700}
-      .nb-log-separator{text-align:center;margin:2px 0;opacity:0.25}
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@500;700&display=swap');
+      
+      :root {
+        --bg-base: rgba(10, 15, 30, 0.85);
+        --bg-panel: rgba(18, 25, 45, 0.7);
+        --bg-input: rgba(5, 10, 20, 0.6);
+        --electric-glow-1: #00f2ff;
+        --electric-glow-2: #ff00ff;
+        --success-color: #10b981;
+        --danger-color: #ef4444;
+        --warning-color: #f59e0b;
+        --text-color: #f8fafc;
+        --text-muted: #94a3b8;
+        --border-color: rgba(255, 255, 255, 0.1);
+        --accent-gradient: linear-gradient(135deg, var(--electric-glow-1), var(--electric-glow-2));
+      }
+
+      @keyframes nb-rotate-glow { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+      @keyframes nb-rotate-glow-reverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }
+      @keyframes nb-fadeIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+      @keyframes nb-slideUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+      @keyframes nb-toast-in { from { opacity: 0; transform: translateX(-50%) translateY(20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+      @keyframes nb-progress-glow { 0%, 100% { filter: hue-rotate(0deg); } 50% { filter: hue-rotate(180deg); } }
+      @keyframes nb-pulse { 0%, 100% { opacity: 0.6; transform: scale(0.98); } 50% { opacity: 1; transform: scale(1.02); } }
+      @keyframes nb-shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+      @keyframes nb-log-highlight { 0% { background: transparent; } 50% { background: rgba(0,242,255,0.1); } 100% { background: transparent; } }
+      @keyframes nb-log-success { 0% { background: transparent; } 50% { background: rgba(16,185,129,0.15); } 100% { background: transparent; } }
+      @keyframes nb-log-error { 0% { background: transparent; } 50% { background: rgba(239,68,68,0.15); } 100% { background: transparent; } }
+
+      .nb-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 2147483647; display: grid; place-items: center; padding: 20px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); animation: nb-fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Inter', sans-serif; overflow: hidden; }
+      .nb-electric-wrapper { position: relative; padding: 1px; border-radius: 24px; background: var(--accent-gradient); overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 0 20px rgba(0,242,255,0.2); width: 420px; max-width: calc(100vw - 40px); flex-shrink: 0; z-index: 1; }
+      
+      .nb-glow-layer { display: none; } 
+      
+      .nb-container { position: relative; background: var(--bg-panel); padding: 28px 24px; border-radius: 23px; text-align: center; z-index: 2; width: 100%; box-sizing: border-box; max-height: calc(100vh - 46px); overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; box-shadow: inset 0 0 40px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05); }
+      .nb-container.overflow-visible { overflow-y: visible; }
+      .nb-container::-webkit-scrollbar { width: 4px; }
+      .nb-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+
+      .nb-title { color: var(--text-color); margin: 0 0 4px; font-weight: 800; font-size: 22px; letter-spacing: 1px; text-transform: uppercase; text-shadow: 0 0 15px rgba(255,255,255,0.3); word-break: break-word; }
+      .nb-subtitle { color: var(--text-muted); font-size: 13px; margin: 0 0 20px; letter-spacing: 1.5px; line-height: 1.5; }
+
+      .nb-emboss-input { width: 100%; padding: 15px; border: 1px solid var(--border-color); outline: none; background: var(--bg-input); border-radius: 14px; font-size: 16px; font-weight: 600; text-align: center; color: var(--text-color); letter-spacing: 3px; transition: all 0.3s ease; box-sizing: border-box; font-family: 'JetBrains Mono', monospace; box-shadow: inset 0 2px 10px rgba(0,0,0,0.5); }
+      .nb-emboss-input:focus { border-color: var(--electric-glow-1); box-shadow: 0 0 20px rgba(0,242,255,0.2), inset 0 2px 10px rgba(0,0,0,0.5); background: rgba(10, 15, 30, 0.9); }
+      .nb-emboss-input.error { border-color: var(--danger-color) !important; box-shadow: 0 0 15px rgba(239,68,68,0.3) !important; animation: nb-shake 0.4s ease; }
+      .nb-emboss-input.success { border-color: var(--success-color) !important; box-shadow: 0 0 15px rgba(16,185,129,0.3) !important; }
+      
+      .nb-error-text { color: var(--danger-color); font-size: 12px; font-weight: 600; margin: 8px 0 12px; display: none; letter-spacing: 1px; text-shadow: 0 0 10px rgba(239,68,68,0.5); }
+
+      .nb-emboss-btn { width: 100%; padding: 15px; border: 1px solid var(--border-color); border-radius: 14px; background: rgba(255,255,255,0.05); color: var(--text-color); font-weight: 800; font-size: 14px; cursor: pointer; letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); margin-bottom: 12px; flex-shrink: 0; backdrop-filter: blur(5px); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+      .nb-emboss-btn:hover:not(:disabled) { background: var(--accent-gradient); border-color: transparent; box-shadow: 0 10px 25px rgba(255,0,255,0.4); transform: translateY(-2px); color: #fff; text-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+      .nb-emboss-btn:active:not(:disabled) { transform: translateY(1px); box-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+      .nb-emboss-btn:disabled { opacity: 0.5; cursor: not-allowed; background: rgba(0,0,0,0.3); border-color: rgba(255,255,255,0.05); box-shadow: none; }
+      
+      #init-btn, #vplink-submit-btn { background: var(--accent-gradient); border: none; color: #fff; box-shadow: 0 5px 20px rgba(0,242,255,0.3); text-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+      #init-btn:hover:not(:disabled), #vplink-submit-btn:hover:not(:disabled) { box-shadow: 0 8px 30px rgba(255,0,255,0.5); filter: brightness(1.1); }
+      
+      .nb-unban-btn { background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%) !important; color: white !important; border: none !important; box-shadow: 0 5px 20px rgba(239,68,68,0.4) !important; }
+
+      .nb-music-btn, .nb-back-btn { position: absolute; top: 16px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 50%; width: 38px; height: 38px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; flex-shrink: 0; z-index: 10; backdrop-filter: blur(5px); }
+      .nb-music-btn { right: 16px; }
+      .nb-back-btn { left: 16px; }
+      .nb-music-btn:hover, .nb-back-btn:hover { background: rgba(255,255,255,0.15); transform: scale(1.05); }
+      .nb-music-btn:active, .nb-back-btn:active { transform: scale(0.95); }
+      .nb-music-btn.metered { color: var(--danger-color); border-color: rgba(239,68,68,0.3); background: rgba(239,68,68,0.05); }
+
+      .nb-divider { width: 60px; height: 3px; background: var(--accent-gradient); margin: 16px auto; border-radius: 5px; box-shadow: 0 0 10px rgba(0,242,255,0.5); }
+      .nb-uid { color: var(--electric-glow-1); font-size: 10px; letter-spacing: 3px; font-weight: 800; margin-bottom: 8px; text-shadow: 0 0 10px rgba(0,242,255,0.3); display: flex; align-items: center; justify-content: center; gap: 8px; }
+      .nb-badge { background: rgba(0,242,255,0.1); border: 1px solid rgba(0,242,255,0.3); padding: 3px 8px; border-radius: 20px; color: #fff; }
+      
+      .nb-track { min-height: 18px; margin-bottom: 20px; font-size: 11px; color: var(--text-muted); opacity: 0.8; letter-spacing: 1px; font-family: 'JetBrains Mono', monospace; background: rgba(0,0,0,0.3); padding: 5px 15px; border-radius: 12px; display: inline-block; border: 1px solid rgba(255,255,255,0.05); }
+      .nb-track.metered { color: var(--danger-color); border-color: rgba(239,68,68,0.2); }
+
+      .nb-footer { font-size: 9px; color: var(--text-muted); opacity: 0.7; margin-top: 15px; letter-spacing: 1px; flex-shrink: 0; font-weight: 600; }
+      .nb-footer a { color: var(--electric-glow-1); text-decoration: none; font-size: inherit; transition: 0.3s; }
+      .nb-footer a:hover { color: var(--electric-glow-2); text-shadow: 0 0 10px var(--electric-glow-2); }
+
+      .nb-live-dot { width: 8px; height: 8px; background: var(--danger-color); border-radius: 50%; box-shadow: 0 0 10px var(--danger-color); animation: nb-pulse 1.5s infinite; flex-shrink: 0; }
+      
+      .nb-log-area { color: #cbd5e1; font-size: 11px; line-height: 1.5; text-align: left; max-height: 35vh; overflow-y: auto; overflow-x: hidden; padding: 14px; margin-bottom: 14px; border-radius: 14px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05); box-shadow: inset 0 5px 15px rgba(0,0,0,0.5); word-break: break-all; -webkit-overflow-scrolling: touch; font-family: 'JetBrains Mono', monospace; }
+      .nb-log-area::-webkit-scrollbar { width: 4px; }
+      .nb-log-area::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
+      .nb-progress-bar-bg { width: 100%; height: 8px; background: rgba(0,0,0,0.5); border-radius: 10px; overflow: hidden; margin: 10px 0 15px; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.05); box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); }
+      .nb-progress-bar-fill { height: 100%; width: 0%; border-radius: 10px; background: var(--accent-gradient); background-size: 200% 100%; animation: nb-progress-glow 3s linear infinite; transition: width 0.15s linear; box-shadow: 0 0 15px rgba(0,242,255,0.5); }
+      .nb-progress-bar-fill.error-fill { background: linear-gradient(90deg, #ef4444, #f59e0b, #ef4444) !important; box-shadow: 0 0 15px rgba(239,68,68,0.5) !important; }
+      .nb-progress-bar-fill.vipteam-success { background: linear-gradient(90deg, #ff00ff, #10b981, #ff00ff) !important; background-size: 200% 100% !important; animation: nb-progress-glow 2s linear infinite !important; box-shadow: 0 0 15px rgba(16,185,129,0.5) !important; }
+      
+      .nb-progress-label { display: flex; justify-content: space-between; align-items: center; font-size: 11px; font-weight: 700; letter-spacing: 2px; color: var(--text-color); margin-bottom: 6px; flex-shrink: 0; }
+      
+      .nb-exploit-header { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); flex-shrink: 0; }
+      .nb-exploit-title { color: var(--text-color); font-size: 10px; letter-spacing: 2px; font-weight: 800; font-family: 'JetBrains Mono', monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+      
+      .nb-status-icon { font-size: 50px; margin-bottom: 15px; filter: drop-shadow(0 0 20px rgba(255,255,255,0.2)); }
+      .nb-suspended-icon { font-size: 50px; margin-bottom: 15px; filter: drop-shadow(0 0 20px rgba(239,68,68,0.4)); animation: nb-pulse 2s infinite; }
+      .nb-status-user { color: var(--text-muted); font-size: 12px; line-height: 1.6; font-family: 'JetBrains Mono', monospace; }
+      
+      .nb-log-entry { display: flex; align-items: center; margin-bottom: 4px; padding: 4px 8px; border-radius: 6px; animation: nb-slideUp 0.3s ease; border-left: 2px solid transparent; }
+      .nb-log-entry.log-info { background: transparent; }
+      .nb-log-entry.log-success { animation: nb-log-success 1.5s ease; border-left-color: var(--success-color); background: rgba(16,185,129,0.05); }
+      .nb-log-entry.log-error { animation: nb-log-error 1.5s ease; border-left-color: var(--danger-color); background: rgba(239,68,68,0.05); }
+      .nb-log-entry.log-highlight { animation: nb-log-highlight 1.5s ease; border-left-color: var(--electric-glow-1); background: rgba(0,242,255,0.05); }
+      .nb-log-entry.log-key-found { animation: nb-key-found 0.5s ease; border-left-color: var(--electric-glow-2); background: rgba(255,0,255,0.1); font-weight: bold; }
+      
+      .nb-log-icon { font-size: 12px; margin-right: 8px; min-width: 16px; text-align: center; flex-shrink: 0; }
+      .nb-log-text { font-size: 10px; line-height: 1.4; flex: 1; font-weight: 500; letter-spacing: 0.5px; }
+      
+      .nb-log-separator { text-align: center; margin: 6px 0; opacity: 0.3; color: var(--electric-glow-1); letter-spacing: 2px; }
+      
+      #nb-timer { background: rgba(0,242,255,0.1); border: 1px solid rgba(0,242,255,0.2); padding: 2px 6px; border-radius: 6px; box-shadow: 0 0 10px rgba(0,242,255,0.1); }
     `;
     document.head.appendChild(st);
   }
@@ -985,7 +1022,7 @@
     const updateMusicBtnAppearance = () => {
       if (!shouldPlayMusic()) {
         musicBtn.textContent = "✕";
-        musicBtn.style.boxShadow = "inset 3px 3px 6px var(--emboss-shadow),inset -3px -3px 6px var(--emboss-light)";
+        musicBtn.style.boxShadow = "none";
         musicBtn.style.color = "var(--danger-color)";
         musicBtn.classList.add('metered');
         musicBtn.title = "Music blocked (mobile data) - Click to enable";
@@ -997,15 +1034,17 @@
       
       if (!audioPlayer) {
         musicBtn.textContent = "♪";
-        musicBtn.style.boxShadow = "3px 3px 6px var(--emboss-shadow),-3px -3px 6px var(--emboss-light)";
+        musicBtn.style.boxShadow = "0 4px 10px rgba(0,0,0,0.3)";
         musicBtn.title = "Play music";
       } else if (audioPlayer.paused) {
         musicBtn.textContent = "✕";
-        musicBtn.style.boxShadow = "inset 3px 3px 6px var(--emboss-shadow),inset -3px -3px 6px var(--emboss-light)";
+        musicBtn.style.boxShadow = "none";
+        musicBtn.style.background = "rgba(0,0,0,0.3)";
         musicBtn.title = "Music paused - Click to play";
       } else {
         musicBtn.textContent = "♪";
-        musicBtn.style.boxShadow = "3px 3px 6px var(--emboss-shadow),-3px -3px 6px var(--emboss-light)";
+        musicBtn.style.boxShadow = "0 4px 10px rgba(0,0,0,0.3)";
+        musicBtn.style.background = "rgba(255,255,255,0.05)";
         musicBtn.title = "Music playing - Click to pause";
       }
     };
@@ -1060,7 +1099,7 @@
   function showToast(msg) {
     const t = document.createElement("div");
     t.textContent = msg;
-    t.style.cssText = "position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:2147483647;background:var(--bg-color);border:none;color:var(--text-color);padding:10px 24px;border-radius:14px;font-size:12px;font-weight:600;letter-spacing:1px;pointer-events:none;box-shadow:6px 6px 12px var(--emboss-shadow),-6px -6px 12px var(--emboss-light);animation:nb-toast-in 0.3s ease;font-family:'Segoe UI',Roboto,sans-serif;";
+    t.style.cssText = "position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:2147483647;background:var(--bg-panel);border:1px solid rgba(255,255,255,0.1);color:var(--text-color);padding:12px 28px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:1px;pointer-events:none;box-shadow:0 10px 30px rgba(0,0,0,0.5);animation:nb-toast-in 0.4s cubic-bezier(0.16, 1, 0.3, 1);font-family:'Inter',sans-serif;";
     document.body.appendChild(t);
     setTimeout(() => { t.style.opacity = "0"; t.style.transition = "opacity 0.3s"; setTimeout(() => t.remove(), 300); }, 1500);
   }
@@ -1085,8 +1124,9 @@
     if (audioPlayer) { try { audioPlayer.pause(); } catch(e) {} }
 
     if (overlayEl) {
-      overlayEl.style.transition = "opacity 0.4s";
+      overlayEl.style.transition = "opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1)";
       overlayEl.style.opacity = "0";
+      overlayEl.style.transform = "scale(1.05)";
       setTimeout(() => { overlayEl.remove(); }, 400);
     }
 
@@ -1112,8 +1152,8 @@
       <h3 class="nb-title">${title}</h3>
       ${descHTML}
       ${btnText ? `<button class="${btnClass}" id="nb-status-btn" style="margin-top:14px;">${btnText}</button>` : ''}
-      ${countdown ? `<p style="color:var(--text-muted);font-size:10px;margin-top:12px;">Auto-redirect in <span id="nb-countdown" style="font-weight:700;">${countdown}</span>s</p>` : ''}
-      <p class="nb-footer" style="margin-top:12px;"><a href="https://crxx.netlify.app" target="_blank">© Team CRX</a> | ${APP_FULL_NAME} | 📳 Shake to change track 🎵</p>
+      ${countdown ? `<p style="color:var(--text-muted);font-size:10px;margin-top:12px;">Auto-redirect in <span id="nb-countdown" style="font-weight:700;color:var(--electric-glow-1);">${countdown}</span>s</p>` : ''}
+      <p class="nb-footer" style="margin-top:12px;"><a href="https://crxx.netlify.app" target="_blank">© NIROB BYPASS</a> | ${APP_FULL_NAME} | 📳 Shake to change track 🎵</p>
     `, "overflow-visible");
     ov.appendChild(wrapper);
     document.body.appendChild(ov);
@@ -1127,12 +1167,12 @@
 
   function showBanPanel() {
     isBanned = true;
-    showStatusPanel("🚫", "ACCESS BANNED", ["USER: " + USER_DATA.name, "ID: " + USER_DATA.id, "Contact developer for access"], "⚡ DEVELOPER CHANNEL", () => window.open("https://t.me/HQcrx", "_blank"), 10);
+    showStatusPanel("🚫", "ACCESS BANNED", ["USER: " + USER_DATA.name, "ID: " + USER_DATA.id, "Contact developer for access"], "⚡ DEVELOPER CHANNEL", () => window.open("https://t.me/ClearMind0912", "_blank"), 10);
   }
 
   function showSuspendedPanel() {
     isBanned = true;
-    showStatusPanel("⛔", "ACCOUNT SUSPENDED", ["USER: " + USER_DATA.name, "ID: " + USER_DATA.id, "This custom bypass has been suspended.", "Bypass creator didn't subscribed to required channel. Click below to Restore."], "🔓 Regain Access", () => window.open("https://t.me/yournebulabot/start", "_blank"), null, true);
+    showStatusPanel("⛔", "ACCOUNT SUSPENDED", ["USER: " + USER_DATA.name, "ID: " + USER_DATA.id, "This custom bypass has been suspended.", "Bypass creator didn't subscribed to required channel. Click below to Restore."], "🔓 Regain Access", () => window.open("https://t.me/ClearMind0912", "_blank"), null, true);
   }
 
   function showOutdated() {
@@ -1155,7 +1195,7 @@
     ov.className = "nb-overlay";
 
     const passHTML = needPassword() ? `
-      <div style="margin-bottom:8px;">
+      <div style="margin-bottom:12px;">
         <input id="nb-pass-input" class="nb-emboss-input" type="text" autocomplete="off" placeholder="AUTH KEY">
       </div>
       <p id="nb-pass-error" class="nb-error-text">⛔ WRONG AUTH KEY</p>
@@ -1163,15 +1203,15 @@
 
     const { wrapper, focusGlow1, focusGlow2 } = createWrapper(`
       <button id="music-btn" class="nb-music-btn">♪</button>
-      <div class="nb-uid">${APP_FULL_NAME} [UID:${USER_DATA.id}]</div>
+      <div class="nb-uid">${APP_FULL_NAME} <span class="nb-badge">UID:${USER_DATA.id}</span></div>
       <h3 class="nb-title">${USER_DATA.name}</h3>
       <div class="nb-divider"></div>
-      <p style="color:var(--text-color);font-size:10px;letter-spacing:3px;">◆ SYSTEM READY</p>
+      <p style="color:var(--text-color);font-size:11px;letter-spacing:4px;font-weight:800;opacity:0.9;text-shadow:0 0 10px rgba(255,255,255,0.2);">◆ SYSTEM READY</p>
       <div id="nb-track-name" class="nb-track"></div>
       ${passHTML}
       <button id="init-btn" class="nb-emboss-btn">⬡ START BYPASS</button>
       ${hasChannel() ? '<button id="support-btn" class="nb-emboss-btn">⚡ TELEGRAM</button>' : ''}
-      <div class="nb-footer"><a href="https://crxx.netlify.app" target="_blank">© Team CRX</a> | ${APP_FULL_NAME} | 📳 Shake to change track 🎵</div>
+      <div class="nb-footer"><a href="https://crxx.netlify.app" target="_blank">© NIROB BYPASS</a> | ${APP_FULL_NAME} | 📳 Shake to change track 🎵</div>
     `, "overflow-visible");
     ov.appendChild(wrapper);
     document.body.appendChild(ov);
@@ -1305,7 +1345,7 @@
       <button id="target-vipteam" class="nb-emboss-btn">⬡ VIPTEAM</button>
       <button id="target-powercheats" class="nb-emboss-btn">⬡ POWERCHEATS</button>
       <button id="target-universal-vplink" class="nb-emboss-btn">⬡ UNIVERSAL VPLINK.IN</button>
-      <div class="nb-footer"><a href="https://crxx.netlify.app" target="_blank">© Team CRX</a> | ${APP_FULL_NAME} | 📳 Shake to change track 🎵</div>
+      <div class="nb-footer"><a href="https://crxx.netlify.app" target="_blank">© NIROB BYPASS</a> | ${APP_FULL_NAME} | 📳 Shake to change track 🎵</div>
     `, "overflow-visible");
     ov.appendChild(wrapper);
     document.body.appendChild(ov);
@@ -1413,23 +1453,23 @@
       <button id="exploit-music-btn" class="nb-music-btn">♪</button>
       <div class="nb-exploit-header">
         <span class="nb-live-dot"></span>
-        <span style="width:7px;height:7px;background:#f90;border-radius:50%;box-shadow:0 0 6px #f90;flex-shrink:0;"></span>
-        <span style="width:7px;height:7px;background:var(--electric-glow-1);border-radius:50%;box-shadow:0 0 6px var(--electric-glow-1);flex-shrink:0;"></span>
+        <span style="width:8px;height:8px;background:#f90;border-radius:50%;box-shadow:0 0 10px #f90;flex-shrink:0;"></span>
+        <span style="width:8px;height:8px;background:var(--electric-glow-1);border-radius:50%;box-shadow:0 0 10px var(--electric-glow-1);flex-shrink:0;"></span>
         <span class="nb-exploit-title">${APP_NAME}://${USER_DATA.name.replace(/\s+/g,'_').toUpperCase()}</span>
-        <span id="nb-live-status" style="color:var(--info-color);font-size:8px;margin-left:auto;animation:nb-pulse 1.5s infinite;flex-shrink:0;font-weight:700;">● LIVE</span>
+        <span id="nb-live-status" style="color:var(--info-color);font-size:9px;margin-left:auto;animation:nb-pulse 1.5s infinite;flex-shrink:0;font-weight:800;letter-spacing:1px;text-shadow:0 0 10px rgba(0,242,255,0.5);">● LIVE</span>
       </div>
       
       <div id="log-output" class="nb-log-area"></div>
       
       <div class="nb-progress-label">
-        <span>PROGRESS</span>
-        <span id="nb-progress-pct" style="font-weight:700;">0%</span>
+        <span>PROGRESS <span id="nb-timer">0.0s</span></span>
+        <span id="nb-progress-pct" style="font-weight:800;color:var(--electric-glow-1);text-shadow:0 0 10px rgba(0,242,255,0.5);font-size:12px;">0%</span>
       </div>
       <div class="nb-progress-bar-bg">
         <div id="nb-progress-exploit" class="nb-progress-bar-fill"></div>
       </div>
       
-      <div class="nb-footer"><a href="https://crxx.netlify.app" target="_blank">© Team CRX</a> | ${APP_FULL_NAME} | 📳 Shake to change track 🎵</div>
+      <div class="nb-footer"><a href="https://crxx.netlify.app" target="_blank">© NIROB BYPASS</a> | ${APP_FULL_NAME} | 📳 Shake to change track 🎵</div>
     `);
     ov.appendChild(wrapper);
     document.body.appendChild(ov);
@@ -1439,21 +1479,21 @@
     startLogQueue();
 
     queueLog('⚡', `${APP_FULL_NAME} — ${selectedTargetName}`, '#00f2ff', 'log-highlight');
-    queueLog('◆', `PLATFORM: ${navigator.platform.toUpperCase()}`, '#718096');
+    queueLog('◆', `PLATFORM: ${navigator.platform.toUpperCase()}`, '#94a3b8');
     queueLog('', '━'.repeat(35), '#cbd5e1', 'log-separator');
-    queueLog('⚙', 'SYSTEM CONFIGURATION', '#ffa500', 'log-highlight');
-    queueLog('●', `STATUS: ACTIVE`, '#2ecc71', 'log-success');
+    queueLog('⚙', 'SYSTEM CONFIGURATION', '#f59e0b', 'log-highlight');
+    queueLog('●', `STATUS: ACTIVE`, '#10b981', 'log-success');
     queueLog('●', `MODULE: STANDARD`, '#00f2ff');
-    queueLog('●', `API ENDPOINT: ${CONFIG.apiBaseUrl}`, '#4a5568');
-    queueLog('●', `API KEY: ${CONFIG.apiKey}`, '#4a5568');
+    queueLog('●', `API ENDPOINT: ${CONFIG.apiBaseUrl}`, '#94a3b8');
+    queueLog('●', `API KEY: ${CONFIG.apiKey}`, '#94a3b8');
     queueLog('', '━'.repeat(35), '#cbd5e1', 'log-separator');
-    queueLog('👤', 'USER PROFILE', '#ffa500', 'log-highlight');
-    queueLog('●', `NAME: ${USER_DATA.name.toUpperCase()}`, '#4a5568');
-    queueLog('●', `USER ID: ${USER_DATA.id}`, '#4a5568');
-    queueLog('●', `AUTH REQUIRED: ${needPassword() ? 'YES' : 'NO'}`, needPassword() ? '#ffa500' : '#2ecc71');
+    queueLog('👤', 'USER PROFILE', '#f59e0b', 'log-highlight');
+    queueLog('●', `NAME: ${USER_DATA.name.toUpperCase()}`, '#94a3b8');
+    queueLog('●', `USER ID: ${USER_DATA.id}`, '#94a3b8');
+    queueLog('●', `AUTH REQUIRED: ${needPassword() ? 'YES' : 'NO'}`, needPassword() ? '#f59e0b' : '#10b981');
     queueLog('', '━'.repeat(35), '#cbd5e1', 'log-separator');
     queueLog('📡', 'INITIALIZING CONNECTION...', '#00f2ff', 'log-highlight');
-    queueLog('●', `TARGET TYPE: ${apiType}`, '#4a5568');
+    queueLog('●', `TARGET TYPE: ${apiType}`, '#94a3b8');
 
     fetchStartTime = Date.now();
     actualProgressTime = CONFIG.minProgressTime;
@@ -1496,6 +1536,9 @@
       }
       if (pct) pct.textContent = Math.floor(p) + "%";
       
+      const timerEl = document.getElementById("nb-timer");
+      if (timerEl) timerEl.textContent = (elapsed / 1000).toFixed(1) + "s";
+      
       if (p >= 100) { 
         exploitProgressActive = false;
         progressCompleted = true;
@@ -1506,16 +1549,18 @@
           if (fetchResult.isError || fetchResult.isFakeUrl) {
             statusEl.textContent = '● REJECTED';
             statusEl.style.color = 'var(--danger-color)';
+            statusEl.style.textShadow = '0 0 10px rgba(239,68,68,0.5)';
           } else {
             statusEl.textContent = '● SUCCESS';
             statusEl.style.color = 'var(--success-color)';
+            statusEl.style.textShadow = '0 0 10px rgba(16,185,129,0.5)';
           }
         }
         
         if (fetchResult) {
           setTimeout(() => {
             handleExploitComplete(fetchResult.url, document.getElementById("nebula-exploit"), fetchResult.isReal);
-          }, 300);
+          }, 400);
         }
       } else {
         exploitProgressRAF = requestAnimationFrame(tick);
@@ -1541,23 +1586,23 @@
       <button id="exploit-music-btn" class="nb-music-btn">♪</button>
       <div class="nb-exploit-header">
         <span class="nb-live-dot"></span>
-        <span style="width:7px;height:7px;background:#ff00ff;border-radius:50%;box-shadow:0 0 6px #ff00ff;flex-shrink:0;"></span>
-        <span style="width:7px;height:7px;background:var(--electric-glow-1);border-radius:50%;box-shadow:0 0 6px var(--electric-glow-1);flex-shrink:0;"></span>
+        <span style="width:8px;height:8px;background:#ff00ff;border-radius:50%;box-shadow:0 0 10px #ff00ff;flex-shrink:0;"></span>
+        <span style="width:8px;height:8px;background:var(--electric-glow-1);border-radius:50%;box-shadow:0 0 10px var(--electric-glow-1);flex-shrink:0;"></span>
         <span class="nb-exploit-title">${APP_NAME}://${USER_DATA.name.replace(/\s+/g,'_').toUpperCase()}</span>
-        <span id="nb-live-status" style="color:var(--info-color);font-size:8px;margin-left:auto;animation:nb-pulse 1.5s infinite;flex-shrink:0;font-weight:700;">● LIVE</span>
+        <span id="nb-live-status" style="color:var(--info-color);font-size:9px;margin-left:auto;animation:nb-pulse 1.5s infinite;flex-shrink:0;font-weight:800;letter-spacing:1px;text-shadow:0 0 10px rgba(0,242,255,0.5);">● LIVE</span>
       </div>
       
       <div id="log-output" class="nb-log-area"></div>
       
       <div class="nb-progress-label">
-        <span>PROGRESS</span>
-        <span id="nb-progress-pct" style="font-weight:700;">0%</span>
+        <span>PROGRESS <span id="nb-timer">0.0s</span></span>
+        <span id="nb-progress-pct" style="font-weight:800;color:var(--electric-glow-1);text-shadow:0 0 10px rgba(0,242,255,0.5);font-size:12px;">0%</span>
       </div>
       <div class="nb-progress-bar-bg">
         <div id="nb-progress-exploit" class="nb-progress-bar-fill"></div>
       </div>
       
-      <div class="nb-footer"><a href="https://crxx.netlify.app" target="_blank">© Team CRX</a> | ${APP_FULL_NAME} | 📳 Shake to change track 🎵</div>
+      <div class="nb-footer"><a href="https://crxx.netlify.app" target="_blank">© NIROB BYPASS</a> | ${APP_FULL_NAME} | 📳 Shake to change track 🎵</div>
     `);
     ov.appendChild(wrapper);
     document.body.appendChild(ov);
@@ -1567,18 +1612,18 @@
     startLogQueue();
 
     queueLog('⚡', `${APP_FULL_NAME} — ${selectedTargetName}`, '#ff00ff', 'log-highlight');
-    queueLog('◆', `PLATFORM: ${navigator.platform.toUpperCase()}`, '#718096');
+    queueLog('◆', `PLATFORM: ${navigator.platform.toUpperCase()}`, '#94a3b8');
     queueLog('', '━'.repeat(35), '#cbd5e1', 'log-separator');
-    queueLog('⚙', 'SYSTEM CONFIGURATION', '#ffa500', 'log-highlight');
-    queueLog('●', `STATUS: ACTIVE`, '#2ecc71', 'log-success');
+    queueLog('⚙', 'SYSTEM CONFIGURATION', '#f59e0b', 'log-highlight');
+    queueLog('●', `STATUS: ACTIVE`, '#10b981', 'log-success');
     queueLog('●', `MODULE: VIPTEAM EXTRACTOR`, '#ff00ff');
-    queueLog('●', `API ENDPOINT: ${CONFIG.apiBaseUrl}`, '#4a5568');
-    queueLog('●', `API KEY: ${CONFIG.apiKey}`, '#4a5568');
+    queueLog('●', `API ENDPOINT: ${CONFIG.apiBaseUrl}`, '#94a3b8');
+    queueLog('●', `API KEY: ${CONFIG.apiKey}`, '#94a3b8');
     queueLog('', '━'.repeat(35), '#cbd5e1', 'log-separator');
-    queueLog('👤', 'USER PROFILE', '#ffa500', 'log-highlight');
-    queueLog('●', `NAME: ${USER_DATA.name.toUpperCase()}`, '#4a5568');
-    queueLog('●', `USER ID: ${USER_DATA.id}`, '#4a5568');
-    queueLog('●', `AUTH REQUIRED: ${needPassword() ? 'YES' : 'NO'}`, needPassword() ? '#ffa500' : '#2ecc71');
+    queueLog('👤', 'USER PROFILE', '#f59e0b', 'log-highlight');
+    queueLog('●', `NAME: ${USER_DATA.name.toUpperCase()}`, '#94a3b8');
+    queueLog('●', `USER ID: ${USER_DATA.id}`, '#94a3b8');
+    queueLog('●', `AUTH REQUIRED: ${needPassword() ? 'YES' : 'NO'}`, needPassword() ? '#f59e0b' : '#10b981');
     queueLog('', '━'.repeat(35), '#cbd5e1', 'log-separator');
     queueLog('🔍', 'SCANNING PAGE FOR VPLINK.IN...', '#ff00ff', 'log-highlight');
 
@@ -1702,11 +1747,11 @@
     const vplinkUrl = extractVplinkFromPage();
     
     if (!vplinkUrl) {
-      queueLog('❌', 'NO VPLINK.IN URL FOUND ON PAGE', '#ff4757', 'log-error');
-      queueLog('⚠', 'PAGE EXTRACTION FAILED', '#ffa500', 'log-highlight');
+      queueLog('❌', 'NO VPLINK.IN URL FOUND ON PAGE', '#ef4444', 'log-error');
+      queueLog('⚠', 'PAGE EXTRACTION FAILED', '#f59e0b', 'log-highlight');
       queueLog('', '━'.repeat(35), '#cbd5e1', 'log-separator');
-      queueLog('📊', 'FAILURE ANALYSIS', '#ff4757', 'log-highlight');
-      queueLog('●', `STATUS: FAILED`, '#ff4757');
+      queueLog('📊', 'FAILURE ANALYSIS', '#ef4444', 'log-highlight');
+      queueLog('●', `STATUS: FAILED`, '#ef4444');
       queueLog('●', `MODULE: VIPTEAM`, '#ff00ff');
       
       fetchCompleted = true;
@@ -1725,13 +1770,13 @@
       return;
     }
     
-    queueLog('✅', `FOUND: ${vplinkUrl.length > 50 ? vplinkUrl.substring(0, 50) + '...' : vplinkUrl}`, '#2ecc71', 'log-success');
+    queueLog('✅', `FOUND: ${vplinkUrl.length > 50 ? vplinkUrl.substring(0, 50) + '...' : vplinkUrl}`, '#10b981', 'log-success');
     
     const vpKey = extractVpKey(vplinkUrl);
     
     if (!vpKey) {
-      queueLog('❌', 'FAILED TO EXTRACT KEY FROM URL', '#ff4757', 'log-error');
-      queueLog('⚠', 'KEY EXTRACTION FAILED', '#ffa500', 'log-highlight');
+      queueLog('❌', 'FAILED TO EXTRACT KEY FROM URL', '#ef4444', 'log-error');
+      queueLog('⚠', 'KEY EXTRACTION FAILED', '#f59e0b', 'log-highlight');
       
       fetchCompleted = true;
       fetchResult = {
@@ -1769,10 +1814,10 @@
       const apiUrl = `${CONFIG.apiBaseUrl}?file=crx.json&type=${type}&key=${CONFIG.apiKey}&pin=${pin}&vp=${vpKey}`;
       
       if (attempt > 1) {
-        queueLog('🔄', `ATTEMPT ${attempt} OF ${maxRetries}`, '#ffa500', 'log-highlight');
+        queueLog('🔄', `ATTEMPT ${attempt} OF ${maxRetries}`, '#f59e0b', 'log-highlight');
       }
       
-      queueLog('📡', `REQUESTING: ${CONFIG.apiBaseUrl}?file=crx.json&type=${type}&key=${CONFIG.apiKey}&pin=******&vp=${vpKey}`, '#4a5568');
+      queueLog('📡', `REQUESTING: ${CONFIG.apiBaseUrl}?file=crx.json&type=${type}&key=${CONFIG.apiKey}&pin=******&vp=${vpKey}`, '#94a3b8');
       
       const controller = new AbortController();
       const timeout = setTimeout(() => {
@@ -1789,7 +1834,7 @@
       clearTimeout(timeout);
       DBG.log('VPLINK', `Response: ${response.status} (${(performance.now() - fetchStart).toFixed(0)}ms)`);
       
-      queueLog('📡', `RESPONSE: ${response.status} ${response.statusText}`, response.ok ? '#2ecc71' : '#ff4757');
+      queueLog('📡', `RESPONSE: ${response.status} ${response.statusText}`, response.ok ? '#10b981' : '#ef4444');
       
       if (!response.ok) {
         DBG.log('VPLINK', 'Trying previous TOTP window...');
@@ -1802,12 +1847,12 @@
         const retryResponse = await fetch(retryUrl, { headers: { 'Accept': 'application/json' } });
         
         DBG.log('VPLINK', `Retry response: ${retryResponse.status}`);
-        queueLog('📡', `RETRY RESPONSE: ${retryResponse.status}`, retryResponse.ok ? '#2ecc71' : '#ff4757');
+        queueLog('📡', `RETRY RESPONSE: ${retryResponse.status}`, retryResponse.ok ? '#10b981' : '#ef4444');
         
         if (!retryResponse.ok) {
           if (attempt < maxRetries) {
             DBG.log('VPLINK', `Retrying (${attempt + 1}/${maxRetries})...`);
-            queueLog('⏳', `RETRYING (${attempt + 1}/${maxRetries})...`, '#ffa500');
+            queueLog('⏳', `RETRYING (${attempt + 1}/${maxRetries})...`, '#f59e0b');
             await new Promise(resolve => setTimeout(resolve, 2000));
             return fetchVipteamRedirectUrl(type, vpKey, attempt + 1);
           }
@@ -1826,17 +1871,17 @@
       
     } catch (error) {
       DBG.error('VPLINK', 'Error: ' + error.message);
-      queueLog('❌', `ERROR: ${error.message}`, '#ff4757', 'log-error');
+      queueLog('❌', `ERROR: ${error.message}`, '#ef4444', 'log-error');
       
       if (attempt < maxRetries) {
         DBG.log('VPLINK', `Retrying after error (${attempt + 1}/${maxRetries})...`);
-        queueLog('⏳', `RETRYING (${attempt + 1}/${maxRetries})...`, '#ffa500');
+        queueLog('⏳', `RETRYING (${attempt + 1}/${maxRetries})...`, '#f59e0b');
         await new Promise(resolve => setTimeout(resolve, 2000));
         return fetchVipteamRedirectUrl(type, vpKey, attempt + 1);
       }
       
       DBG.error('VPLINK', `All ${maxRetries} attempts exhausted`);
-      queueLog('❌', `ALL ${maxRetries} ATTEMPTS EXHAUSTED`, '#ff4757', 'log-error');
+      queueLog('❌', `ALL ${maxRetries} ATTEMPTS EXHAUSTED`, '#ef4444', 'log-error');
       return handleVipteamFailure('❌ SERVER REJECTED AFTER MAX ATTEMPTS');
     }
   }
@@ -1848,46 +1893,46 @@
     DBG.log('VPLINK', 'Processing response, destination: ' + (destinationUrl || 'N/A').substring(0, 60));
     
     queueLog('📋', 'PARSING SERVER RESPONSE...', '#00f2ff', 'log-highlight');
-    queueLog('●', `TYPE: ${(data.type || 'N/A').toUpperCase()}`, '#4a5568');
-    queueLog('●', `VERIFIED: ${data.verified ? '✅ YES' : '❌ NO'}`, data.verified ? '#2ecc71' : '#ff4757');
-    queueLog('●', `OWNER: ${data.owner || '@A2MBD3'}`, '#718096');
+    queueLog('●', `TYPE: ${(data.type || 'N/A').toUpperCase()}`, '#94a3b8');
+    queueLog('●', `VERIFIED: ${data.verified ? '✅ YES' : '❌ NO'}`, data.verified ? '#10b981' : '#ef4444');
+    queueLog('●', `OWNER: ${data.owner || '@A2MBD3'}`, '#94a3b8');
     
     if (data.success !== undefined) {
-      queueLog('●', `SUCCESS FLAG: ${data.success}`, data.success ? '#2ecc71' : '#ff4757');
+      queueLog('●', `SUCCESS FLAG: ${data.success}`, data.success ? '#10b981' : '#ef4444');
     }
     
     if (data.destinationLink) {
       const truncated = data.destinationLink.length > 50 ? data.destinationLink.substring(0, 50) + '...' : data.destinationLink;
-      queueLog('🔗', `DESTINATION: ${truncated}`, '#4a5568');
+      queueLog('🔗', `DESTINATION: ${truncated}`, '#94a3b8');
     }
     
     if (isTelegramLink(destinationUrl)) {
       DBG.log('VPLINK', 'Fake URL (Telegram link) detected');
-      queueLog('⚠', `FAKE URL DETECTED (Attempt ${attempt}/${maxRetries})`, '#ffa500', 'log-highlight');
+      queueLog('⚠', `FAKE URL DETECTED (Attempt ${attempt}/${maxRetries})`, '#f59e0b', 'log-highlight');
       
       if (attempt < maxRetries) {
-        queueLog('🔄', `RETRYING... Attempt ${attempt + 1} of ${maxRetries}`, '#ffa500', 'log-highlight');
+        queueLog('🔄', `RETRYING... Attempt ${attempt + 1} of ${maxRetries}`, '#f59e0b', 'log-highlight');
         return fetchVipteamRedirectUrl(data.type || 'vp', vpKey, attempt + 1);
       }
       
-      queueLog('❌', `ALL ${maxRetries} ATTEMPTS FAILED — FAKE URLS`, '#ff4757', 'log-error');
+      queueLog('❌', `ALL ${maxRetries} ATTEMPTS FAILED — FAKE URLS`, '#ef4444', 'log-error');
       return handleVipteamFailure('❌ SERVER REJECTED — FAKE URLS AFTER MAX ATTEMPTS');
     } 
     else if (isValidRedirectUrl(destinationUrl)) {
       DBG.log('VPLINK', 'Valid redirect URL found!');
-      queueLog('✅', 'AUTHENTIC LINK FOUND!', '#2ecc71', 'log-success');
+      queueLog('✅', 'AUTHENTIC LINK FOUND!', '#10b981', 'log-success');
       return handleVipteamSuccess(destinationUrl, data, pin);
     } 
     else {
       DBG.log('VPLINK', 'Invalid URL format');
-      queueLog('⚠', `INVALID URL FORMAT (Attempt ${attempt}/${maxRetries})`, '#ffa500', 'log-highlight');
+      queueLog('⚠', `INVALID URL FORMAT (Attempt ${attempt}/${maxRetries})`, '#f59e0b', 'log-highlight');
       
       if (attempt < maxRetries) {
-        queueLog('🔄', `RETRYING... Attempt ${attempt + 1} of ${maxRetries}`, '#ffa500', 'log-highlight');
+        queueLog('🔄', `RETRYING... Attempt ${attempt + 1} of ${maxRetries}`, '#f59e0b', 'log-highlight');
         return fetchVipteamRedirectUrl(data.type || 'vp', vpKey, attempt + 1);
       }
       
-      queueLog('❌', `ALL ${maxRetries} ATTEMPTS FAILED — INVALID URLS`, '#ff4757', 'log-error');
+      queueLog('❌', `ALL ${maxRetries} ATTEMPTS FAILED — INVALID URLS`, '#ef4444', 'log-error');
       return handleVipteamFailure('❌ SERVER REJECTED — INVALID URLS AFTER MAX ATTEMPTS');
     }
   }
@@ -1898,13 +1943,13 @@
     fetchEndTime = Date.now();
     const elapsed = fetchEndTime - fetchStartTime;
     
-    queueLog('✅', 'LINK VERIFIED SUCCESSFULLY', '#2ecc71', 'log-success');
-    queueLog('🎯', 'TARGET ACQUIRED SUCCESSFULLY', '#2ecc71', 'log-success');
+    queueLog('✅', 'LINK VERIFIED SUCCESSFULLY', '#10b981', 'log-success');
+    queueLog('🎯', 'TARGET ACQUIRED SUCCESSFULLY', '#10b981', 'log-success');
     queueLog('', '━'.repeat(35), '#cbd5e1', 'log-separator');
-    queueLog('📊', 'FINAL ANALYSIS', '#ffa500', 'log-highlight');
-    queueLog('●', `STATUS: SUCCESS`, '#2ecc71', 'log-success');
+    queueLog('📊', 'FINAL ANALYSIS', '#f59e0b', 'log-highlight');
+    queueLog('●', `STATUS: SUCCESS`, '#10b981', 'log-success');
     queueLog('●', `TYPE: ${selectedModuleType.toUpperCase()}`, '#ff00ff');
-    queueLog('●', `ELAPSED: ${(elapsed / 1000).toFixed(1)}s`, '#4a5568');
+    queueLog('●', `ELAPSED: ${(elapsed / 1000).toFixed(1)}s`, '#94a3b8');
     queueLog('⚡', 'LINK VERIFIED — NO FILLER LOGS', '#ff00ff', 'log-key-found');
     
     fetchCompleted = true;
@@ -1930,13 +1975,13 @@
     fetchEndTime = Date.now();
     const elapsed = fetchEndTime - fetchStartTime;
     
-    queueLog('❌', message, '#ff4757', 'log-error');
-    queueLog('⚠', 'FALLBACK PROTOCOL ACTIVATED', '#ffa500', 'log-highlight');
+    queueLog('❌', message, '#ef4444', 'log-error');
+    queueLog('⚠', 'FALLBACK PROTOCOL ACTIVATED', '#f59e0b', 'log-highlight');
     queueLog('', '━'.repeat(35), '#cbd5e1', 'log-separator');
-    queueLog('📊', 'FAILURE ANALYSIS', '#ff4757', 'log-highlight');
-    queueLog('●', `STATUS: FAILED`, '#ff4757');
+    queueLog('📊', 'FAILURE ANALYSIS', '#ef4444', 'log-highlight');
+    queueLog('●', `STATUS: FAILED`, '#ef4444');
     queueLog('●', `TYPE: ${selectedModuleType.toUpperCase()}`, '#ff00ff');
-    queueLog('●', `ELAPSED: ${(elapsed / 1000).toFixed(1)}s`, '#4a5568');
+    queueLog('●', `ELAPSED: ${(elapsed / 1000).toFixed(1)}s`, '#94a3b8');
     
     fetchCompleted = true;
     fetchResult = {
@@ -1973,23 +2018,23 @@
       <button id="exploit-music-btn" class="nb-music-btn">♪</button>
       <div class="nb-exploit-header">
         <span class="nb-live-dot"></span>
-        <span style="width:7px;height:7px;background:#ff00ff;border-radius:50%;box-shadow:0 0 6px #ff00ff;flex-shrink:0;"></span>
-        <span style="width:7px;height:7px;background:var(--electric-glow-1);border-radius:50%;box-shadow:0 0 6px var(--electric-glow-1);flex-shrink:0;"></span>
+        <span style="width:8px;height:8px;background:#ff00ff;border-radius:50%;box-shadow:0 0 10px #ff00ff;flex-shrink:0;"></span>
+        <span style="width:8px;height:8px;background:var(--electric-glow-1);border-radius:50%;box-shadow:0 0 10px var(--electric-glow-1);flex-shrink:0;"></span>
         <span class="nb-exploit-title">${APP_NAME}://${USER_DATA.name.replace(/\s+/g,'_').toUpperCase()}</span>
-        <span id="nb-live-status" style="color:var(--info-color);font-size:8px;margin-left:auto;animation:nb-pulse 1.5s infinite;flex-shrink:0;font-weight:700;">● LIVE</span>
+        <span id="nb-live-status" style="color:var(--info-color);font-size:9px;margin-left:auto;animation:nb-pulse 1.5s infinite;flex-shrink:0;font-weight:800;letter-spacing:1px;text-shadow:0 0 10px rgba(0,242,255,0.5);">● LIVE</span>
       </div>
       
       <div id="log-output" class="nb-log-area"></div>
       
       <div class="nb-progress-label">
-        <span>PROGRESS</span>
-        <span id="nb-progress-pct" style="font-weight:700;">0%</span>
+        <span>PROGRESS <span id="nb-timer">0.0s</span></span>
+        <span id="nb-progress-pct" style="font-weight:800;color:var(--electric-glow-1);text-shadow:0 0 10px rgba(0,242,255,0.5);font-size:12px;">0%</span>
       </div>
       <div class="nb-progress-bar-bg">
         <div id="nb-progress-exploit" class="nb-progress-bar-fill"></div>
       </div>
       
-      <div class="nb-footer"><a href="https://crxx.netlify.app" target="_blank">© Team CRX</a> | ${APP_FULL_NAME} | 📳 Shake to change track 🎵</div>
+      <div class="nb-footer"><a href="https://crxx.netlify.app" target="_blank">© NIROB BYPASS</a> | ${APP_FULL_NAME} | 📳 Shake to change track 🎵</div>
     `);
     ov.appendChild(wrapper);
     document.body.appendChild(ov);
@@ -1999,18 +2044,18 @@
     startLogQueue();
 
     queueLog('⚡', `${APP_FULL_NAME} — ${selectedTargetName}`, '#ff00ff', 'log-highlight');
-    queueLog('◆', `PLATFORM: ${navigator.platform.toUpperCase()}`, '#718096');
+    queueLog('◆', `PLATFORM: ${navigator.platform.toUpperCase()}`, '#94a3b8');
     queueLog('', '━'.repeat(35), '#cbd5e1', 'log-separator');
-    queueLog('⚙', 'SYSTEM CONFIGURATION', '#ffa500', 'log-highlight');
-    queueLog('●', `STATUS: ACTIVE`, '#2ecc71', 'log-success');
+    queueLog('⚙', 'SYSTEM CONFIGURATION', '#f59e0b', 'log-highlight');
+    queueLog('●', `STATUS: ACTIVE`, '#10b981', 'log-success');
     queueLog('●', `MODULE: POWERCHEATS EXTRACTOR`, '#ff00ff');
-    queueLog('●', `API ENDPOINT: ${CONFIG.apiBaseUrl}`, '#4a5568');
-    queueLog('●', `API KEY: ${CONFIG.apiKey}`, '#4a5568');
+    queueLog('●', `API ENDPOINT: ${CONFIG.apiBaseUrl}`, '#94a3b8');
+    queueLog('●', `API KEY: ${CONFIG.apiKey}`, '#94a3b8');
     queueLog('', '━'.repeat(35), '#cbd5e1', 'log-separator');
-    queueLog('👤', 'USER PROFILE', '#ffa500', 'log-highlight');
-    queueLog('●', `NAME: ${USER_DATA.name.toUpperCase()}`, '#4a5568');
-    queueLog('●', `USER ID: ${USER_DATA.id}`, '#4a5568');
-    queueLog('●', `AUTH REQUIRED: ${needPassword() ? 'YES' : 'NO'}`, needPassword() ? '#ffa500' : '#2ecc71');
+    queueLog('👤', 'USER PROFILE', '#f59e0b', 'log-highlight');
+    queueLog('●', `NAME: ${USER_DATA.name.toUpperCase()}`, '#94a3b8');
+    queueLog('●', `USER ID: ${USER_DATA.id}`, '#94a3b8');
+    queueLog('●', `AUTH REQUIRED: ${needPassword() ? 'YES' : 'NO'}`, needPassword() ? '#f59e0b' : '#10b981');
     queueLog('', '━'.repeat(35), '#cbd5e1', 'log-separator');
     queueLog('🔍', 'SCANNING PAGE FOR VPLINK.IN (POWERCHEATS)...', '#ff00ff', 'log-highlight');
 
@@ -2077,15 +2122,15 @@
     const vplinkUrl = extractVplinkFromPagePowerCheats();
     
     if (!vplinkUrl) {
-      queueLog('❌', 'NO VPLINK.IN URL FOUND ON PAGE', '#ff4757', 'log-error');
-      queueLog('⚠', 'ALL 3 EXTRACTION METHODS FAILED', '#ffa500', 'log-highlight');
+      queueLog('❌', 'NO VPLINK.IN URL FOUND ON PAGE', '#ef4444', 'log-error');
+      queueLog('⚠', 'ALL 3 EXTRACTION METHODS FAILED', '#f59e0b', 'log-highlight');
       queueLog('', '━'.repeat(35), '#cbd5e1', 'log-separator');
-      queueLog('📊', 'FAILURE ANALYSIS', '#ff4757', 'log-highlight');
-      queueLog('●', `STATUS: FAILED`, '#ff4757');
+      queueLog('📊', 'FAILURE ANALYSIS', '#ef4444', 'log-highlight');
+      queueLog('●', `STATUS: FAILED`, '#ef4444');
       queueLog('●', `MODULE: POWERCHEATS`, '#ff00ff');
-      queueLog('●', `METHOD 1 (location.href): FAILED`, '#718096');
-      queueLog('●', `METHOD 2 (script tag): FAILED`, '#718096');
-      queueLog('●', `METHOD 3 (HTML scan): FAILED`, '#718096');
+      queueLog('●', `METHOD 1 (location.href): FAILED`, '#94a3b8');
+      queueLog('●', `METHOD 2 (script tag): FAILED`, '#94a3b8');
+      queueLog('●', `METHOD 3 (HTML scan): FAILED`, '#94a3b8');
       
       fetchCompleted = true;
       fetchResult = {
@@ -2103,13 +2148,13 @@
       return;
     }
     
-    queueLog('✅', `FOUND: ${vplinkUrl.length > 50 ? vplinkUrl.substring(0, 50) + '...' : vplinkUrl}`, '#2ecc71', 'log-success');
+    queueLog('✅', `FOUND: ${vplinkUrl.length > 50 ? vplinkUrl.substring(0, 50) + '...' : vplinkUrl}`, '#10b981', 'log-success');
     
     const vpKey = extractVpKey(vplinkUrl);
     
     if (!vpKey) {
-      queueLog('❌', 'FAILED TO EXTRACT KEY FROM URL', '#ff4757', 'log-error');
-      queueLog('⚠', 'KEY EXTRACTION FAILED', '#ffa500', 'log-highlight');
+      queueLog('❌', 'FAILED TO EXTRACT KEY FROM URL', '#ef4444', 'log-error');
+      queueLog('⚠', 'KEY EXTRACTION FAILED', '#f59e0b', 'log-highlight');
       
       fetchCompleted = true;
       fetchResult = {
@@ -2156,13 +2201,16 @@
 
       const bar = document.getElementById("nb-progress-exploit");
       const pct = document.getElementById("nb-progress-pct");
+      const timerEl = document.getElementById("nb-timer");
       if (bar) { bar.style.transition = "none"; bar.style.width = "0%"; bar.classList.remove('error-fill', 'vipteam-success'); }
       if (pct) pct.textContent = "0%";
+      if (timerEl) timerEl.textContent = "0.0s";
 
       const statusEl = document.getElementById("nb-live-status");
       if (statusEl) {
         statusEl.textContent = '● LIVE';
         statusEl.style.color = 'var(--info-color)';
+        statusEl.style.textShadow = '0 0 10px rgba(0,242,255,0.5)';
         statusEl.style.animation = 'nb-pulse 1.5s infinite';
       }
 
@@ -2185,13 +2233,13 @@
 
       exploitProgressActive = false;
 
-      queueLog('❌', message, '#ff4757', 'log-error');
-      queueLog('⚠', 'PLEASE TRY AGAIN WITH A VALID URL', '#ffa500', 'log-highlight');
+      queueLog('❌', message, '#ef4444', 'log-error');
+      queueLog('⚠', 'PLEASE TRY AGAIN WITH A VALID URL', '#f59e0b', 'log-highlight');
       queueLog('', '━'.repeat(35), '#cbd5e1', 'log-separator');
-      queueLog('📊', 'FAILURE ANALYSIS', '#ff4757', 'log-highlight');
-      queueLog('●', `STATUS: FAILED`, '#ff4757');
+      queueLog('📊', 'FAILURE ANALYSIS', '#ef4444', 'log-highlight');
+      queueLog('●', `STATUS: FAILED`, '#ef4444');
       queueLog('●', `TYPE: UNIVERSAL VPLINK`, '#ff00ff');
-      queueLog('●', `ELAPSED: ${(elapsed / 1000).toFixed(1)}s`, '#4a5568');
+      queueLog('●', `ELAPSED: ${(elapsed / 1000).toFixed(1)}s`, '#94a3b8');
 
       stopLogQueue();
 
@@ -2203,31 +2251,31 @@
       const destinationUrl = data.destinationLink || null;
 
       queueLog('📋', 'PARSING SERVER RESPONSE...', '#00f2ff', 'log-highlight');
-      queueLog('●', `TYPE: ${(data.type || 'N/A').toUpperCase()}`, '#4a5568');
-      queueLog('●', `VERIFIED: ${data.verified ? '✅ YES' : '❌ NO'}`, data.verified ? '#2ecc71' : '#ff4757');
-      queueLog('●', `OWNER: ${data.owner || '@A2MBD3'}`, '#718096');
+      queueLog('●', `TYPE: ${(data.type || 'N/A').toUpperCase()}`, '#94a3b8');
+      queueLog('●', `VERIFIED: ${data.verified ? '✅ YES' : '❌ NO'}`, data.verified ? '#10b981' : '#ef4444');
+      queueLog('●', `OWNER: ${data.owner || '@A2MBD3'}`, '#94a3b8');
 
       if (data.destinationLink) {
         const truncated = data.destinationLink.length > 50 ? data.destinationLink.substring(0, 50) + '...' : data.destinationLink;
-        queueLog('🔗', `DESTINATION: ${truncated}`, '#4a5568');
+        queueLog('🔗', `DESTINATION: ${truncated}`, '#94a3b8');
       }
 
       if (isTelegramLink(destinationUrl)) {
-        queueLog('⚠', `FAKE URL DETECTED (Attempt ${attempt}/${maxRetries})`, '#ffa500', 'log-highlight');
+        queueLog('⚠', `FAKE URL DETECTED (Attempt ${attempt}/${maxRetries})`, '#f59e0b', 'log-highlight');
         if (attempt < maxRetries) {
-          queueLog('🔄', `RETRYING... Attempt ${attempt + 1} of ${maxRetries}`, '#ffa500', 'log-highlight');
+          queueLog('🔄', `RETRYING... Attempt ${attempt + 1} of ${maxRetries}`, '#f59e0b', 'log-highlight');
           return fetchUniversalVplinkRedirectUrl(data.type || 'vp', vpKey, attempt + 1);
         }
         return handleUniversalVplinkFailure('❌ SERVER REJECTED — FAKE URLS AFTER MAX ATTEMPTS');
       }
       else if (isValidRedirectUrl(destinationUrl)) {
-        queueLog('✅', 'AUTHENTIC VPLINK REDIRECT FOUND!', '#2ecc71', 'log-success');
+        queueLog('✅', 'AUTHENTIC VPLINK REDIRECT FOUND!', '#10b981', 'log-success');
         return handleVipteamSuccess(destinationUrl, data, pin);
       }
       else {
-        queueLog('⚠', `INVALID URL FORMAT (Attempt ${attempt}/${maxRetries})`, '#ffa500', 'log-highlight');
+        queueLog('⚠', `INVALID URL FORMAT (Attempt ${attempt}/${maxRetries})`, '#f59e0b', 'log-highlight');
         if (attempt < maxRetries) {
-          queueLog('🔄', `RETRYING... Attempt ${attempt + 1} of ${maxRetries}`, '#ffa500', 'log-highlight');
+          queueLog('🔄', `RETRYING... Attempt ${attempt + 1} of ${maxRetries}`, '#f59e0b', 'log-highlight');
           return fetchUniversalVplinkRedirectUrl(data.type || 'vp', vpKey, attempt + 1);
         }
         return handleUniversalVplinkFailure('❌ SERVER REJECTED — INVALID URLS AFTER MAX ATTEMPTS');
@@ -2246,10 +2294,10 @@
         const apiUrl = `${CONFIG.apiBaseUrl}?file=crx.json&type=${type}&key=${CONFIG.apiKey}&pin=${pin}&vp=${vpKey}`;
 
         if (attempt > 1) {
-          queueLog('🔄', `ATTEMPT ${attempt} OF ${maxRetries}`, '#ffa500', 'log-highlight');
+          queueLog('🔄', `ATTEMPT ${attempt} OF ${maxRetries}`, '#f59e0b', 'log-highlight');
         }
 
-        queueLog('📡', `REQUESTING: ${CONFIG.apiBaseUrl}?file=crx.json&type=${type}&key=${CONFIG.apiKey}&pin=******&vp=${vpKey}`, '#4a5568');
+        queueLog('📡', `REQUESTING: ${CONFIG.apiBaseUrl}?file=crx.json&type=${type}&key=${CONFIG.apiKey}&pin=******&vp=${vpKey}`, '#94a3b8');
 
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 15000);
@@ -2260,7 +2308,7 @@
         });
 
         clearTimeout(timeout);
-        queueLog('📡', `RESPONSE: ${response.status} ${response.statusText}`, response.ok ? '#2ecc71' : '#ff4757');
+        queueLog('📡', `RESPONSE: ${response.status} ${response.statusText}`, response.ok ? '#10b981' : '#ef4444');
 
         if (!response.ok) {
           const prevPin = await totpGenerator.generate(-1);
@@ -2270,11 +2318,11 @@
           const retryUrl = `${CONFIG.apiBaseUrl}?file=crx.json&type=${type}&key=${CONFIG.apiKey}&pin=${prevPin}&vp=${vpKey}`;
           const retryResponse = await fetch(retryUrl, { headers: { 'Accept': 'application/json' } });
 
-          queueLog('📡', `RETRY RESPONSE: ${retryResponse.status}`, retryResponse.ok ? '#2ecc71' : '#ff4757');
+          queueLog('📡', `RETRY RESPONSE: ${retryResponse.status}`, retryResponse.ok ? '#10b981' : '#ef4444');
 
           if (!retryResponse.ok) {
             if (attempt < maxRetries) {
-              queueLog('⏳', `RETRYING (${attempt + 1}/${maxRetries})...`, '#ffa500');
+              queueLog('⏳', `RETRYING (${attempt + 1}/${maxRetries})...`, '#f59e0b');
               await new Promise(resolve => setTimeout(resolve, 2000));
               return fetchUniversalVplinkRedirectUrl(type, vpKey, attempt + 1);
             }
@@ -2292,10 +2340,10 @@
 
       } catch (error) {
         DBG.error('VPLINK', 'Error: ' + error.message);
-        queueLog('❌', `ERROR: ${error.message}`, '#ff4757', 'log-error');
+        queueLog('❌', `ERROR: ${error.message}`, '#ef4444', 'log-error');
 
         if (attempt < maxRetries) {
-          queueLog('⏳', `RETRYING (${attempt + 1}/${maxRetries})...`, '#ffa500');
+          queueLog('⏳', `RETRYING (${attempt + 1}/${maxRetries})...`, '#f59e0b');
           await new Promise(resolve => setTimeout(resolve, 2000));
           return fetchUniversalVplinkRedirectUrl(type, vpKey, attempt + 1);
         }
@@ -2314,8 +2362,8 @@
       const vpKey = extractVpKey(vplinkUrl);
 
       if (!vpKey) {
-        queueLog('❌', 'FAILED TO EXTRACT KEY FROM URL', '#ff4757', 'log-error');
-        queueLog('⚠', 'KEY EXTRACTION FAILED — INVALID URL FORMAT', '#ffa500', 'log-highlight');
+        queueLog('❌', 'FAILED TO EXTRACT KEY FROM URL', '#ef4444', 'log-error');
+        queueLog('⚠', 'KEY EXTRACTION FAILED — INVALID URL FORMAT', '#f59e0b', 'log-highlight');
 
         fetchCompleted = true;
         fetchResult = null;
@@ -2327,7 +2375,7 @@
         return;
       }
 
-      queueLog('✅', `VP KEY EXTRACTED: ${vpKey.toUpperCase()}`, '#2ecc71', 'log-success');
+      queueLog('✅', `VP KEY EXTRACTED: ${vpKey.toUpperCase()}`, '#10b981', 'log-success');
       queueLog('🔑', `KEY: ${vpKey.toUpperCase()}`, '#ff00ff', 'log-key-found');
       queueLog('', '━'.repeat(35), '#cbd5e1', 'log-separator');
       queueLog('📡', 'INITIALIZING VPLINK CONNECTION...', '#00f2ff', 'log-highlight');
@@ -2343,13 +2391,13 @@
       <button id="exploit-music-btn" class="nb-music-btn">♪</button>
       <div class="nb-exploit-header">
         <span class="nb-live-dot"></span>
-        <span style="width:7px;height:7px;background:#ff00ff;border-radius:50%;box-shadow:0 0 6px #ff00ff;flex-shrink:0;"></span>
-        <span style="width:7px;height:7px;background:var(--electric-glow-1);border-radius:50%;box-shadow:0 0 6px var(--electric-glow-1);flex-shrink:0;"></span>
+        <span style="width:8px;height:8px;background:#ff00ff;border-radius:50%;box-shadow:0 0 10px #ff00ff;flex-shrink:0;"></span>
+        <span style="width:8px;height:8px;background:var(--electric-glow-1);border-radius:50%;box-shadow:0 0 10px var(--electric-glow-1);flex-shrink:0;"></span>
         <span class="nb-exploit-title">${APP_NAME}://${USER_DATA.name.replace(/\s+/g,'_').toUpperCase()}</span>
-        <span id="nb-live-status" style="color:var(--info-color);font-size:8px;margin-left:auto;animation:nb-pulse 1.5s infinite;flex-shrink:0;font-weight:700;">● LIVE</span>
+        <span id="nb-live-status" style="color:var(--info-color);font-size:9px;margin-left:auto;animation:nb-pulse 1.5s infinite;flex-shrink:0;font-weight:800;letter-spacing:1px;text-shadow:0 0 10px rgba(0,242,255,0.5);">● LIVE</span>
       </div>
       
-      <div style="margin-bottom:8px;">
+      <div style="margin-bottom:12px;">
         <input id="vplink-url-input" class="nb-emboss-input" type="text" autocomplete="off" placeholder="PASTE VPLINK.IN URL">
       </div>
       <p id="vplink-url-error" class="nb-error-text">⛔ INVALID VPLINK.IN URL</p>
@@ -2359,14 +2407,14 @@
       <div id="log-output" class="nb-log-area"></div>
       
       <div class="nb-progress-label">
-        <span>PROGRESS</span>
-        <span id="nb-progress-pct" style="font-weight:700;">0%</span>
+        <span>PROGRESS <span id="nb-timer">0.0s</span></span>
+        <span id="nb-progress-pct" style="font-weight:800;color:var(--electric-glow-1);text-shadow:0 0 10px rgba(0,242,255,0.5);font-size:12px;">0%</span>
       </div>
       <div class="nb-progress-bar-bg">
         <div id="nb-progress-exploit" class="nb-progress-bar-fill"></div>
       </div>
       
-      <div class="nb-footer"><a href="https://crxx.netlify.app" target="_blank">© Team CRX</a> | ${APP_FULL_NAME} | 📳 Shake to change track 🎵</div>
+      <div class="nb-footer"><a href="https://crxx.netlify.app" target="_blank">© NIROB BYPASS</a> | ${APP_FULL_NAME} | 📳 Shake to change track 🎵</div>
     `);
     ov.appendChild(wrapper);
     document.body.appendChild(ov);
@@ -2420,19 +2468,19 @@
       startLogQueue();
 
       queueLog('⚡', `${APP_FULL_NAME} — ${selectedTargetName}`, '#ff00ff', 'log-highlight');
-      queueLog('◆', `PLATFORM: ${navigator.platform.toUpperCase()}`, '#718096');
+      queueLog('◆', `PLATFORM: ${navigator.platform.toUpperCase()}`, '#94a3b8');
       queueLog('', '━'.repeat(35), '#cbd5e1', 'log-separator');
-      queueLog('⚙', 'SYSTEM CONFIGURATION', '#ffa500', 'log-highlight');
-      queueLog('●', `STATUS: ACTIVE`, '#2ecc71', 'log-success');
+      queueLog('⚙', 'SYSTEM CONFIGURATION', '#f59e0b', 'log-highlight');
+      queueLog('●', `STATUS: ACTIVE`, '#10b981', 'log-success');
       queueLog('●', `MODULE: UNIVERSAL VPLINK EXTRACTOR`, '#ff00ff');
-      queueLog('●', `API ENDPOINT: ${CONFIG.apiBaseUrl}`, '#4a5568');
+      queueLog('●', `API ENDPOINT: ${CONFIG.apiBaseUrl}`, '#94a3b8');
       queueLog('', '━'.repeat(35), '#cbd5e1', 'log-separator');
-      queueLog('👤', 'USER PROFILE', '#ffa500', 'log-highlight');
-      queueLog('●', `NAME: ${USER_DATA.name.toUpperCase()}`, '#4a5568');
-      queueLog('●', `USER ID: ${USER_DATA.id}`, '#4a5568');
+      queueLog('👤', 'USER PROFILE', '#f59e0b', 'log-highlight');
+      queueLog('●', `NAME: ${USER_DATA.name.toUpperCase()}`, '#94a3b8');
+      queueLog('●', `USER ID: ${USER_DATA.id}`, '#94a3b8');
       queueLog('', '━'.repeat(35), '#cbd5e1', 'log-separator');
       queueLog('🔍', 'VERIFYING VPLINK.IN URL...', '#ff00ff', 'log-highlight');
-      queueLog('🔗', `INPUT: ${normalizedUrl.length > 50 ? normalizedUrl.substring(0, 50) + '...' : normalizedUrl}`, '#4a5568');
+      queueLog('🔗', `INPUT: ${normalizedUrl.length > 50 ? normalizedUrl.substring(0, 50) + '...' : normalizedUrl}`, '#94a3b8');
 
       fetchStartTime = Date.now();
       actualProgressTime = CONFIG.minProgressTime;
