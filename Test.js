@@ -89,8 +89,8 @@
     userDataApiUrl: "https://nebula-bot-sa9k.onrender.com",
     fallbackRedirectUrl: "crxx.pages.dev",
     initProgressTime: 10000,
-    exploitProgressTime: 100000,
-    minProgressTime: 100000,
+    exploitProgressTime: 60000,
+    minProgressTime: 60000,
     autoInitDelay: 10000,
     corsProxy: "https://api.allorigins.win/raw?url="
   };
